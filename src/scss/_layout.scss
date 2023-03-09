@@ -1,6 +1,7 @@
 :root {
     --white: hsl(0, 0%, 100%);
     --black: hsl(0, 0%, 0%);
+    --lightGray: #ececec;
     --darkGray: hsl(0, 0%, 55%);
     --veryDarkGray: hsl(0, 0%, 41%); 
     // color-scheme: light dark;
@@ -12,20 +13,29 @@
     margin: 0;
     padding: 0;
     word-wrap: break-word;
+    line-height: 0.8;
 }
 
 
 body {
+    color: var(--black);
     min-height: 100vh;
     overflow-x: hidden;
-    font-family: 'Alata', sans-serif;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 19px;
+}
+
+
+input {
+    font: inherit;
+    min-width: 0;
 }
 
 img { max-width: 100%; }
 .ucase { text-transform: uppercase; }
 .light { font-weight:300; }
 .sans { font-family: 'Open Sans'; }
-.size-1 { font-size: clamp(2.3rem , 2.3rem + 0.4vw, 3rem); }
+.size-1 { font-size: clamp(2.6rem , 2.5rem + 0.4vw, 3.5rem); }
 .size-2 { font-size: clamp(1.7rem , 1.7rem + 0.4vw, 2.9rem); }
 .size-3 { font-size: clamp(1.6rem , 1.6rem + 0.4vw, 2.7rem); }
 .list-none { list-style: none; }

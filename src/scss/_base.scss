@@ -1,0 +1,187 @@
+body {
+    width: 100%;
+    min-height: 100vh;
+    padding-block-start: 70px;
+
+
+    --br: 0.4vmax;
+}
+
+
+img.bg {
+    pointer-events: none;
+    object-fit: cover;
+    object-position: top left;
+    z-index: -1;
+
+    &, &::before {
+        position: fixed;
+        inset: 0 auto auto auto;
+        width: 100%;
+        height: 300px;
+    }
+
+
+
+    &::before {
+        content: "";
+        background: linear-gradient(-45deg, #8c99f9, #b668f0);
+    }
+}
+
+
+
+
+#app {
+    margin: 0 auto;
+    width: min(600px, 90vw);
+    // background: #fff;
+
+
+    &, main {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+    }
+    
+
+}
+
+
+
+
+header {
+
+    color: var(--white);
+    justify-content: space-between;
+    letter-spacing: 6px;
+    align-items: flex-end;
+    // min-height: 200px;
+
+
+}
+
+
+
+.theme {
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+
+
+    &, & .strip {
+        flex-direction: column;
+    }
+
+    // height: ;
+
+    &, & svg {
+      height: 30px;  
+    }
+
+
+
+}
+
+
+main {
+    margin-top: 0.7rem;
+
+    .todo-input, .todo {
+        position: relative;
+    }
+
+
+    .todo {
+        button[data-checkbox] {
+                content: '';
+                width: 20px;
+                aspect-ratio: 1;
+                background: var(--white);
+                border-radius: 50%;
+                border: 1px solid var(--lightGray);
+                cursor: pointer;
+                inset: 0 auto auto 0;
+                margin-block-end: 0.2rem;
+        }
+    }
+
+
+
+    div.todo-input {
+        border-radius: var(--br);
+
+
+
+        &::before {
+            content: '';
+            width: 20px;
+            aspect-ratio: 1;
+            background: var(--white);
+            border-radius: 50%;
+            border: 1px solid var(--lightGray);
+            cursor: pointer;
+            inset: 0 auto auto 0;
+            margin-block-end: 0.2rem;
+        }
+
+
+
+
+
+    }
+
+
+    input {
+        width: 100%;
+        border: none;
+        outline: none;
+    }
+
+
+}
+
+
+
+
+ul#todos {
+
+
+
+    flex-direction: column;
+    list-style: none;
+    border-radius: var(--br);
+    box-shadow: 0 0 5px -1px rgb(0 0 0 / 0.2);
+
+
+    & > li:first-child {
+        border-start-start-radius: var(--br);
+        border-start-end-radius: var(--br);
+    }
+
+    & > li:last-child {
+        border-end-start-radius: var(--br);
+        border-end-end-radius: var(--br);
+    }
+
+
+    li + li {
+        border-top: 1px solid var(--lightGray);
+    }
+}
+
+
+
+
+// Arbitrary name for The white bg and common padding.
+.pc {
+    background: var(--white);
+    padding: 1.2rem 1.2rem;
+    outline: none;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    // justify-content: ;
+    align-items: center;
+}
+
