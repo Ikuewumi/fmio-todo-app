@@ -1,17 +1,52 @@
+
+@use "./layout" as *;
+
 body {
     width: 100%;
     min-height: 100vh;
     padding-block-start: 70px;
-
+    padding-block-end: 50px;
+    background: var(--white);
 
     --br: 0.4vmax;
+
+
+
+
+    &.dark {
+        .all-todos {
+            box-shadow: 0 3px 14px -9px rgba(233, 233, 233, 0.8);
+        }
+
+        
+        img.bg{
+            &.dark {display: block;}
+            &.light {display: none;}
+        }
+
+
+        .theme {
+            .strip {
+                transform: translateY(-50%);
+            }
+        }
+    }
+
+
+
+
+
+    img.bg{
+        &.light {display: block;}
+        &.dark {display: none;}
+    }
 }
 
 
 img.bg {
     pointer-events: none;
     object-fit: cover;
-    object-position: top left;
+    object-position: center center;
     z-index: -1;
 
     &, &::before {
@@ -19,6 +54,12 @@ img.bg {
         inset: 0 auto auto auto;
         width: 100%;
         height: 300px;
+    
+    
+    
+        @media (max-width: $mdWidth) {
+            height: 250px;
+        }
     }
 
 
@@ -52,7 +93,7 @@ img.bg {
 
 header {
 
-    color: var(--white);
+    color: #fff;
     justify-content: space-between;
     letter-spacing: 6px;
     align-items: flex-end;
@@ -66,10 +107,25 @@ header {
 .theme {
     overflow: hidden;
     margin-bottom: 0.5rem;
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
 
+
+    &:focus-visible {
+        outline: 3px solid var(--blue);
+        outline-offset: -2px;
+    }
 
     &, & .strip {
         flex-direction: column;
+    }
+
+
+    .strip {
+        transform: translateY(0%);
+        transition: 0.4s ease;
     }
 
     // height: ;
@@ -83,6 +139,13 @@ header {
 }
 
 
+
+
+
+
+
+
+
 main {
     margin-top: 0.7rem;
 
@@ -92,29 +155,97 @@ main {
 
 
     .todo {
-        button[data-checkbox] {
-                content: '';
-                width: 20px;
+        
+        button[data-checkbox], button[data-close] {
+                width: 30px;
+                // height: 30px;
                 aspect-ratio: 1;
                 background: var(--white);
-                border-radius: 50%;
-                border: 1px solid var(--lightGray);
                 cursor: pointer;
-                inset: 0 auto auto 0;
                 margin-block-end: 0.2rem;
+                border: 1px solid var(--lightGray);
+
+
+                * {
+                    pointer-events: none;
+                }
+        }
+        
+        
+        
+        button[data-checkbox] {
+            box-shadow:0 0 4px -1px rgb(0 0 0 / 0.3);
+            border-radius: 50%;
+            display: flex;
+            place-items: center;
+
+
+            svg {
+                visibility: hidden;
+                width: 20px;
+                // height: 9px;
+                background: transparent;
+                margin: 0 auto;
+            }
+        }
+        
+        
+        
+        button[data-close] {
+            border-width: 0px;
+            margin-inline-start: auto;
+        
+        
+            svg {
+                fill: var(--black)
+            }
+        }
+    }
+
+
+    .todo {
+        button[data-close] {
+            width: 18px;
+
+            @media (max-width: $mdWidth) { visibility: visible; }
+            visibility: hidden;
+        }
+
+
+        &:hover {
+
+            button[data-close] {
+                visibility: visible;
+            }
+
+        }
+
+
+
+        &.checked {
+            button[data-checkbox] {
+                background: linear-gradient(-45deg, #8c99f9, #b668f0);
+                svg { visibility: visible; }
+            }
+
+
+            &>span {
+                color: var(--darkGray);
+                text-decoration: line-through;
+            }
         }
     }
 
 
 
-    div.todo-input {
+    form.todo-input {
         border-radius: var(--br);
 
-
-
+        // Shouldn;t rewrite code, but I don't have any other approach
         &::before {
             content: '';
-            width: 20px;
+            width: 30px;
+            height: 30px;
             aspect-ratio: 1;
             background: var(--white);
             border-radius: 50%;
@@ -135,6 +266,8 @@ main {
         width: 100%;
         border: none;
         outline: none;
+        background: transparent;
+        color: var(--black);
     }
 
 
@@ -147,18 +280,15 @@ ul#todos {
 
 
 
-    flex-direction: column;
-    list-style: none;
-    border-radius: var(--br);
-    box-shadow: 0 0 5px -1px rgb(0 0 0 / 0.2);
 
 
-    & > li:first-child {
+
+    & li:first-child {
         border-start-start-radius: var(--br);
         border-start-end-radius: var(--br);
     }
 
-    & > li:last-child {
+    & li:last-child {
         border-end-start-radius: var(--br);
         border-end-end-radius: var(--br);
     }
@@ -167,7 +297,149 @@ ul#todos {
     li + li {
         border-top: 1px solid var(--lightGray);
     }
+
+
+
+
+ 
+
+
 }
+
+
+
+.all-todos {
+
+    &.empty {
+        .empty {
+            display: flex;
+        }
+    }
+
+
+    .empty {
+        display: none;
+        place-items: center;
+        place-content: center;
+        // padding-block: 0.5rem;
+        margin-block-end: -0.1rem;
+        
+        background: var(--white);
+
+
+        svg {
+            margin: 0 auto;
+            width: min(270px, 70vw);
+        }
+    }
+
+
+    flex-direction: column;
+    list-style: none;
+    border-radius: var(--br);
+    overflow: hidden;
+    box-shadow: 0 3px 14px -9px rgb(0 0 0 / 0.3);
+
+
+
+
+    
+    .foot {
+        justify-content: space-between;
+        font-weight: 600;
+        padding-block: 1.2rem;
+        border-top: 1px solid var(--lightGray);
+        
+        
+        &, button {
+            color: var(--darkGray);
+        }
+
+
+        button {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+
+        &>small, &>button {
+            font-size: clamp(0.8rem , 0.8rem + 0.4vw, 0.96rem);
+        }
+    }
+
+
+    .categories {
+        display: flex;
+        
+        @media (max-width: $mdWidth) {
+            display: none;
+        }
+    }
+
+    
+    
+}
+.categories {
+    display: flex;
+    flex-direction: row;
+    column-gap: 1rem;
+    
+    button {
+        border: none;
+        background: transparent;
+        color: var(--darkGray);
+        cursor: pointer;
+    }
+
+    button:focus {
+        outline: 1px dotted var(--blue);
+    }
+
+
+    button.active {
+        color: var(--blue);
+    }
+
+
+
+
+    &.mobile {
+        display: flex;
+        padding: 1.2rem;
+        box-shadow: 0 2px 8px 0px rgb(0 0 0 / 4%);
+        place-items: center;
+        place-content: center;
+        border-radius: var(--br);
+
+        margin-block-start: -0.4rem;
+
+
+        @media (min-width: $mdWidth) {
+            display: none;
+        }
+    }
+
+
+    
+}
+
+
+footer {
+    color: var(--darkGray);
+    text-align: center;
+    margin-block-start: 0.6rem;
+    font-size: 0.99rem;
+}
+
+
+svg#svgs {
+    display: none;
+}
+
+
+
+
 
 
 
@@ -175,7 +447,7 @@ ul#todos {
 // Arbitrary name for The white bg and common padding.
 .pc {
     background: var(--white);
-    padding: 1.2rem 1.2rem;
+    padding: 0.8rem 1.2rem;
     outline: none;
     border: none;
     display: flex;
@@ -184,4 +456,8 @@ ul#todos {
     // justify-content: ;
     align-items: center;
 }
+
+
+
+
 

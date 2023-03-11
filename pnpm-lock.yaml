@@ -4,9 +4,11 @@ specifiers:
   sass: ^1.58.3
   typescript: ^4.9.5
   vite: ^4.1.0
+  zod: ^3.21.3
 
 dependencies:
   typescript: 4.9.5
+  zod: 3.21.3
 
 devDependencies:
   sass: 1.58.3
@@ -467,3 +469,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /zod/3.21.3:
+    resolution: {integrity: sha512-tz1QgJomEhMTQhOBvQxnnrTo8q77EjpGLlaWicCoEEkMzScuONzDkJKIHr83CS89fGY24iGCStj2ZOCHpPOEyA==}
+    dev: false

@@ -1,10 +1,25 @@
+$mdWidth: 768px;
+
+
 :root {
     --white: hsl(0, 0%, 100%);
     --black: hsl(0, 0%, 0%);
     --lightGray: #ececec;
     --darkGray: hsl(0, 0%, 55%);
     --veryDarkGray: hsl(0, 0%, 41%); 
+    --blue: hsl(220, 98%, 61%);
     // color-scheme: light dark;
+}
+
+
+
+body.dark {
+    --white: hsl(0, 0%, 20%);
+    --black: hsl(0, 0%, 100%);
+    --darkGray: #ececec;
+    --lightGray: hsl(0, 0%, 55%);
+    --veryDarkGray: hsl(0, 0%, 41%); 
+    --blue: hsl(220, 98%, 61%);
 }
 
 
@@ -26,7 +41,7 @@ body {
 }
 
 
-input {
+input, button {
     font: inherit;
     min-width: 0;
 }
@@ -38,6 +53,7 @@ img { max-width: 100%; }
 .size-1 { font-size: clamp(2.6rem , 2.5rem + 0.4vw, 3.5rem); }
 .size-2 { font-size: clamp(1.7rem , 1.7rem + 0.4vw, 2.9rem); }
 .size-3 { font-size: clamp(1.6rem , 1.6rem + 0.4vw, 2.7rem); }
+.size-small { font-size: clamp(0.8rem , 0.8rem + 0.4vw, 0.96rem); }
 .list-none { list-style: none; }
 .contents { display: contents; }
 .flex { display: flex; }
