@@ -1,4 +1,4 @@
-import { addNewTodo, appData, checkTodo, clearCompleted, removeTodo } from "./todos";
+import { addNewTodo, appData, checkTodo, clearCompleted, findIndex, removeTodo, switchTodos } from "./todos";
 import { Filters, Todo, zTodo } from "./types";
 
 const main = document.querySelector('main')! as HTMLDivElement;
@@ -11,7 +11,6 @@ const clearEl = main.querySelector('button#clear-completed')! as HTMLSpanElement
 const formEl = main.querySelector('form')! as HTMLFormElement
 const inputEl = formEl.querySelector('input')! as HTMLInputElement
 const categories = main.querySelectorAll('.categories');
-
 
 
 
@@ -72,9 +71,6 @@ todosEl.addEventListener('click', (e) => {
     const elIsCheckBtn = typeof el.getAttribute("data-checkbox")==='string'
     const elIsCloseBtn = typeof el.getAttribute("data-close")==='string'
     const elIsButton = el.tagName.toLowerCase() === "button" && (elIsCheckBtn || elIsCloseBtn);
-    
-    console.log(attributes, elIsButton)
-
 
     if (!elIsButton) return
 
@@ -113,6 +109,76 @@ export const selectCategory = (filter: Filters) => {
 
 
 
+const addDragListeners = () => {
+
+
+    let prevIndex = -1;
+    let newIndex = -1;
+
+
+    todosEl.addEventListener('drag', (e) => {
+        e.preventDefault()
+        const el = e.target! as HTMLElement 
+        const elIsTodo = el.tagName.toLowerCase() === 'li';
+        if (elIsTodo) { prevIndex = findIndex(el.textContent!) }
+    })
+
+
+
+
+    todosEl.addEventListener('dragover', (e) => {
+        e.preventDefault()
+        const el = e.target! as HTMLElement 
+        const elIsTodo = el.tagName.toLowerCase() === 'li';
+        if (elIsTodo) el.classList.add('dragover')
+    })
+
+
+
+
+
+    todosEl.addEventListener('dragleave', (e) => {
+        e.preventDefault()
+        const el = e.target! as HTMLElement 
+        const elIsTodo = el.tagName.toLowerCase() === 'li';
+        if (elIsTodo) el.classList.remove('dragover');
+    })
+
+
+    todosEl.addEventListener('dragend', (e) => {
+        e.preventDefault()
+    })
+
+
+
+    todosEl.addEventListener('drop', (e) => {
+        e.preventDefault()
+        const el = e.target! as HTMLElement 
+        const elIsTodo = el.tagName.toLowerCase() === 'li';
+        if (elIsTodo) {
+            el.classList.remove('dragover')
+            newIndex = findIndex(el.textContent!)
+            switchTodos(prevIndex, newIndex)
+        }
+    })
+
+
+
+
+}
+
+
+const removeDragListeners = () => {
+    todosEl.removeEventListener('dragover', _ => {})
+    todosEl.removeEventListener('dragend', _ => {})
+    todosEl.removeEventListener('dragenter', _ => {})
+    todosEl.removeEventListener('dragleave', _ => {})
+    todosEl.removeEventListener('dragover', _ => {})
+    todosEl.removeEventListener('drop', _ => {})
+    todosEl.removeEventListener('dragstart', _ => {})
+}
+
+
 
 export const writeTodos = (todos: Array<Todo>) => {
 
@@ -120,7 +186,7 @@ export const writeTodos = (todos: Array<Todo>) => {
     todos.map(todo => {
 
         const html = `
-            <li class="todo pc ${todo?.checked ? 'checked' : ''}" draggable>
+            <li class="todo pc ${todo?.checked ? 'checked' : ''}" draggable="true">
                 <button data-checkbox title="check!"><svg viewBox="0 0 11 9"><use href="#check"></use></svg></button>
                 <span>${todo.content}</span>
                 <button data-close title="remove todo"><svg viewBox="0 0 18 18"><use href="#cross"></use></svg></button>
@@ -131,17 +197,13 @@ export const writeTodos = (todos: Array<Todo>) => {
 
     })
     
-    
-
     // Add CLass to show the empty state
     if (todos.length === 0) { todoSection.classList.add('empty') }
     else { todoSection.classList.remove('empty') }
 
 
-    // console.log()
-
-
-
+    removeDragListeners()
+    addDragListeners()
 
 
 
@@ -153,3 +215,5 @@ export const writeTodos = (todos: Array<Todo>) => {
 export const writeFreq = (n: number) => {
     freqInfo.textContent = `${n} items completed`
 }
+
+

@@ -11,7 +11,9 @@ const ls = 'fmio-ik-todo-app';
  * @param {string} todo The todo as a string
  * @returns {number} the index of the string in the todos array
  */
-const findIndex = (todo: string): number => {
+export const findIndex = (todo: string): number => {
+    if(typeof todo !== 'string') throw Error('invalid parameter');
+
     const index = appData.todos.findIndex(todo_ => 
         todo_.content.toLowerCase().trim() === todo.toLowerCase().trim()
     )
@@ -30,10 +32,12 @@ const storeData = (obj: ProxyTodo) => {
 
 
 const getData = () => {
-    const lsRes = JSON.parse(localStorage.getItem(ls)!)
+    const res = localStorage.getItem(ls)
+
+    const lsRes = JSON.parse(res!)
     let data: ProxyTodo;
     if (!lsRes) {data = zProxyTodo.parse({})}  
-    data = zProxyTodo.strip().parse(lsRes)
+    else {data = zProxyTodo.strip().parse(lsRes)}
 
     return data
 }
@@ -56,7 +60,6 @@ export const filterTodos = (filter: Filters, todos: Todo[]) => {
             result = todos
             break;
     }
-    console.log(result, filter)
     return result
 }
 
@@ -79,9 +82,7 @@ export const appData = new Proxy(_privateData, {
     set(prop: ProxyTodo, p: string, newVal: any) {
         if (p === 'todos') {
             const newValue = newVal as Array<Todo>
-            console.log(prop.filter)
             const t = filterTodos(prop.filter, newValue)
-            console.log(newValue, t)
             writeTodos(t)
             const completeCount = newValue.filter(todo => todo.checked).length
             writeFreq(completeCount)
@@ -89,7 +90,6 @@ export const appData = new Proxy(_privateData, {
         
         if (p === 'filter') {
             const t = filterTodos(newVal as Filters, prop.todos)
-            console.log(newVal)
             selectCategory(newVal)
             writeTodos(t)
             const completeCount = prop.todos.filter(todo => todo.checked).length
@@ -105,7 +105,6 @@ export const appData = new Proxy(_privateData, {
 
         storeData(newObject)
         const lsObject = getData()
-        console.log('local storage')
 
         return Reflect.set(prop, p, newVal)
     }
@@ -148,7 +147,36 @@ export const addNewTodo = (str: string = "") => {
 
 
 
+export const switchTodos = (prevIndex: number, newIndex: number) => {
 
+    /** the boolean value of the checks on the indexes for drag and drop. To pass all the chacks, neither of them must be -1, equal to each other or greater than the todos array length */
+    const checks = (prevIndex !== -1 || newIndex !== -1) &&
+        (prevIndex !== newIndex) &&
+        (prevIndex < appData.todos.length || newIndex < appData.todos.length)
+
+
+
+    if (!checks) {
+        return
+    }
+
+
+
+
+
+    const prevTodo = appData.todos[prevIndex]
+    const nextTodo = appData.todos[newIndex]
+
+    appData.todos = appData.todos.map((todo, index) => {
+        if (index === prevIndex) { return nextTodo }
+        if (index === newIndex) { return prevTodo }
+        return todo
+    })
+
+
+    // const 
+
+}
 
 
 
